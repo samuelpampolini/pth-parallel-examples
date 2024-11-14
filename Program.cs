@@ -16,18 +16,28 @@ services.AddLogging(builder =>
     });
 });
 
-//services.AddScoped<IExample, DeadLock>();
-//services.AddScoped<IExample, RaceCondition>();
-//services.AddScoped<IExample, ThreadSafeQueue>();
+services.AddScoped<IExampleFactory, ExampleFactory>()
+    .AddScoped<DeadLock>()
+    .AddScoped<RaceCondition>()
+    .AddScoped<ThreadSafeQueue>();
 
 var dependencyInjectionProvider = services.BuildServiceProvider();
 var logger = dependencyInjectionProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Program");
-
-var example = dependencyInjectionProvider.GetRequiredService<IExample>();
-
-do
+var exampleFactory = dependencyInjectionProvider.GetRequiredService<IExampleFactory>();
+CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+while (true)
 {
-    await example.Run();
 
-    logger.LogInformation("Press ESC to exit or any other key to run again");
-} while(Console.ReadKey().Key != ConsoleKey.Escape);
+    Console.Clear();
+    logger.LogInformation("Press the number of the example you want to run:");
+    logger.LogInformation("1 - DeadLock");
+    logger.LogInformation("2 - RaceCondition");
+    logger.LogInformation("3 - ThreadSafeQueue");
+
+    string key = Console.ReadKey().Key.ToString();
+    if (key == "Escape") break;
+
+    var example = exampleFactory.CreateExample(key);
+    await example.Run(cancellationTokenSource);
+}
+

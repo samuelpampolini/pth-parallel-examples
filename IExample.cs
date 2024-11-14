@@ -1,5 +1,5 @@
 ﻿namespace Conference;
 public interface IExample
 {
-    Task Run();
+    Task Run(CancellationTokenSource cancellationTokenSource);
 }

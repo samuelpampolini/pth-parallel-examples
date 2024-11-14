@@ -16,10 +16,9 @@ internal sealed class RaceCondition : IExample
     void Work2() { result = 2; }
     void Work3() { result = 3; }
 
-    public Task Run()
+    public Task Run(CancellationTokenSource cancellationTokenSource)
     {
-        CancellationToken cts = new CancellationToken();
-
+        CancellationToken cts = cancellationTokenSource.Token;
         _logger.LogInformation("Starting Possible Race Condition");
 
         var job = new RaceCondition(_logger);

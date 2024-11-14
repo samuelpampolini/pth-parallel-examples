@@ -7,6 +7,7 @@ This project is designed to ilustrate the multithread processing and some of the
 
 Deadlock
 RaceConditions
+ThreadSafeQueue
 
 One usage of a Threadsafe collection: this example has a producer and consumer.
 The Producer thread will read the file line by line, and the consumers only when find something at the queue will process them.
@@ -23,17 +24,7 @@ You have input.txt as a 15 line file example, if you want to see more tou can ex
     git clone https://github.com/samuelpampolini/pth-parallel-examples
     cd pth-parallel-examples
     ```
-
-2. **Un comment the example you want to execute**
-    On the `program.cs` file you have to uncomment one of the each lines below:
-    ```code
-    //services.AddScoped<IExample, DeadLock>();
-    //services.AddScoped<IExample, RaceCondition>();
-    //services.AddScoped<IExample, ThreadSafeQueue>();
-    ```
-    You only can have one uncomment to execut properly the example.
-
-3. **Run the application:**
+2. **Run the application:**
     ```bash
     dotnet run
     ```

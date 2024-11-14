@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace Conference;
 
-internal sealed class ThreadSafeQueue: IExample
+internal sealed class ThreadSafeQueue : IExample
 {
     private ILogger<ThreadSafeQueue> _logger;
 
@@ -15,11 +15,10 @@ internal sealed class ThreadSafeQueue: IExample
     ConcurrentQueue<string> bufferFromFile = new ConcurrentQueue<string>();
     bool endOfFile = false;
 
-    public async Task Run()
+    public async Task Run(CancellationTokenSource cancellationTokenSource)
     {
+        CancellationToken cts = cancellationTokenSource.Token;
         _logger.LogInformation("Starting the Porto Tech hub Job");
-
-        CancellationToken cts = new CancellationToken();
 
         Task readFile = ReadFile(cts);
         Task process = Parallel.ForAsync(0, 3, cts, async (index, ct) => await ProcessLine(index, ct));
@@ -41,6 +40,12 @@ internal sealed class ThreadSafeQueue: IExample
                 {
                     bufferFromFile.Enqueue(line);
                     await Task.Delay(50, cancellationToken);
+
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        _logger.LogWarning("Cancellation requested");
+                        break;
+                    }
                 }
             }
 
@@ -55,6 +60,12 @@ internal sealed class ThreadSafeQueue: IExample
         {
             while (!endOfFile || !bufferFromFile.IsEmpty)
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    _logger.LogWarning("Cancellation requested");
+                    break;
+                }
+
                 if (bufferFromFile.TryDequeue(out string? line))
                 {
                     _logger.LogWarning(line);
