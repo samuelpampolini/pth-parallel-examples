@@ -34,8 +34,8 @@ while (true)
     logger.LogInformation("2 - RaceCondition");
     logger.LogInformation("3 - ThreadSafeQueue");
 
-    string key = Console.ReadKey().Key.ToString();
-    if (key == "Escape") break;
+    ConsoleKey key = Console.ReadKey().Key;
+    if (key == ConsoleKey.Escape) break;
 
     var example = exampleFactory.CreateExample(key);
     await example.Run(cancellationTokenSource);
