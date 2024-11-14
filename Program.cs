@@ -39,5 +39,8 @@ while (true)
 
     var example = exampleFactory.CreateExample(key);
     await example.Run(cancellationTokenSource);
+
+    logger.LogInformation("Press any key to clear the console and choose the next execution:");
+    Console.ReadKey();
 }
 

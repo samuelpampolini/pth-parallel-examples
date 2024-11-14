@@ -30,3 +30,11 @@ You have input.txt as a 15 line file example, if you want to see more tou can ex
     ```
     The application will end when you press ESC key, the only exception is with the Deadlock example that you need to hit `CTRL+C`
 
+    You will be presented with the follow options:
+    ```bash
+    info: Program[0] Press the number of the example you want to run:
+    info: Program[0] 1 - DeadLock
+    info: Program[0] 2 - RaceCondition
+    info: Program[0] 3 - ThreadSafeQueue
+    ```
+
