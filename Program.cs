@@ -19,6 +19,7 @@ services.AddLogging(builder =>
 services.AddScoped<IExampleFactory, ExampleFactory>()
     .AddScoped<DeadLock>()
     .AddScoped<RaceCondition>()
+    .AddScoped<ThreadContention>()
     .AddScoped<ThreadSafeQueue>();
 
 var dependencyInjectionProvider = services.BuildServiceProvider();
@@ -32,7 +33,8 @@ while (true)
     logger.LogInformation("Press the number of the example you want to run:");
     logger.LogInformation("1 - DeadLock");
     logger.LogInformation("2 - RaceCondition");
-    logger.LogInformation("3 - ThreadSafeQueue");
+    logger.LogInformation("3 - ThreadContention");
+    logger.LogInformation("4 - ThreadSafeQueue");
 
     ConsoleKey key = Console.ReadKey().Key;
     if (key == ConsoleKey.Escape) break;

@@ -21,6 +21,8 @@ internal sealed class ExampleFactory(IServiceProvider serviceProvider, ILogger<E
             case ConsoleKey.D2:
                 return serviceProvider.GetService<RaceCondition>();
             case ConsoleKey.D3:
+                return serviceProvider.GetService<ThreadContention>();
+            case ConsoleKey.D4:
                 return serviceProvider.GetService<ThreadSafeQueue>();
             default:
                 throw new ArgumentException("Invalid type", nameof(type));
