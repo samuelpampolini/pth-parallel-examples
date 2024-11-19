@@ -33,9 +33,8 @@ You have input.txt as a 15 line file example, if you want to see more tou can ex
     You will be presented with the follow options:
     ```bash
     info: Program[0] Press the number of the example you want to run:
-    info: Program[0] 1 - DeadLock
-    info: Program[0] 2 - RaceCondition
-    info: Program[0] 3 - ThreadContention
-    info: Program[0] 4 - ThreadSafeQueue
+    info: Conference.ExampleFactory[0] D1 - DeadLock
+    info: Conference.ExampleFactory[0] D2 - RaceCondition
+    info: Conference.ExampleFactory[0] D3 - ThreadContention
+    info: Conference.ExampleFactory[0] D4 - ThreadSafeQueue
     ```
-
