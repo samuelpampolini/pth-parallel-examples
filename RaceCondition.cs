@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 
 namespace Conference;
+[ExampleAttribute(nameof(RaceCondition), ConsoleKey.D2)]
 internal sealed class RaceCondition : IExample
 {
     private ILogger<RaceCondition> _logger;

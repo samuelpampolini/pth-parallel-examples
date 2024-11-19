@@ -28,21 +28,19 @@ var exampleFactory = dependencyInjectionProvider.GetRequiredService<IExampleFact
 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 while (true)
 {
-
     Console.Clear();
     logger.LogInformation("Press the number of the example you want to run:");
-    logger.LogInformation("1 - DeadLock");
-    logger.LogInformation("2 - RaceCondition");
-    logger.LogInformation("3 - ThreadContention");
-    logger.LogInformation("4 - ThreadSafeQueue");
+    logger.LogInformation("Press C key to clear the console");
+    exampleFactory.PrintCommands();
 
     ConsoleKey key = Console.ReadKey().Key;
     if (key == ConsoleKey.Escape) break;
 
     var example = exampleFactory.CreateExample(key);
-    await example.Run(cancellationTokenSource);
 
-    logger.LogInformation("Press any key to clear the console and choose the next execution:");
-    Console.ReadKey();
+    do {
+        await example.Run(cancellationTokenSource);
+        key = Console.ReadKey().Key;
+    } while (key != ConsoleKey.Escape);
 }
 

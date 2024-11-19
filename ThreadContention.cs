@@ -2,6 +2,7 @@
 
 namespace Conference;
 
+[ExampleAttribute(nameof(ThreadContention), ConsoleKey.D3)]
 internal sealed class ThreadContention : IExample
 {
     private ILogger<ThreadContention> _logger;

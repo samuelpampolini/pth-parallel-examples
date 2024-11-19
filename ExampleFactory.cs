@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -6,26 +8,60 @@ namespace Conference;
 public interface IExampleFactory
 {
     IExample CreateExample(ConsoleKey type);
+    void PrintCommands();
 }
 
-internal sealed class ExampleFactory(IServiceProvider serviceProvider, ILogger<ExampleFactory>  logger) : IExampleFactory
+internal sealed class ExampleFactory : IExampleFactory
 {
+    private ImmutableSortedDictionary<ConsoleKey, IExample> _examples;
+    private IServiceProvider _serviceProvider;
+    private ILogger<ExampleFactory> _logger;
+
+    public ExampleFactory(IServiceProvider serviceProvider, ILogger<ExampleFactory> logger)
+    {
+        _serviceProvider = serviceProvider;
+        _logger = logger;
+        _examples = ImmutableSortedDictionary<ConsoleKey, IExample>.Empty;
+
+        LoadExamples();
+    }
+
+    private void LoadExamples()
+    {
+        var loadingDictionary = new Dictionary<ConsoleKey, IExample>();
+        Assembly.GetExecutingAssembly()
+           .GetTypes()
+           .Where(t => t.GetCustomAttributes<ExampleAttribute>().Any())
+           .ToList()
+           .ForEach(t =>
+           {
+               var attribute = t.GetCustomAttribute<ExampleAttribute>();
+               var example = _serviceProvider.GetService(t) as IExample;
+
+               if (example != null && attribute != null)
+                   loadingDictionary.Add(attribute.Key, example);
+           });
+
+        _examples = loadingDictionary.ToImmutableSortedDictionary();
+    }
+
     public IExample CreateExample(ConsoleKey type)
     {
-        logger.LogInformation("Creating example of type {type}", type);
+        _logger.LogInformation("Creating example of type {type}", type);
 
-        switch (type)
+        if (_examples.ContainsKey(type))
         {
-            case ConsoleKey.D1:
-                return serviceProvider.GetService<DeadLock>();
-            case ConsoleKey.D2:
-                return serviceProvider.GetService<RaceCondition>();
-            case ConsoleKey.D3:
-                return serviceProvider.GetService<ThreadContention>();
-            case ConsoleKey.D4:
-                return serviceProvider.GetService<ThreadSafeQueue>();
-            default:
-                throw new ArgumentException("Invalid type", nameof(type));
+            return _examples[type];
         }
+
+        throw new ArgumentException("Invalid type", nameof(type));
+    }
+
+    public void PrintCommands()
+    {
+        _examples.ToList().ForEach(e =>
+        {
+            _logger.LogInformation("{key} - {name}", e.Key, e.Value.GetType().Name);
+        });
     }
 }

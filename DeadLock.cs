@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 
 namespace Conference;
+[ExampleAttribute(nameof(DeadLock), ConsoleKey.D1)]
 internal sealed class DeadLock : IExample
 {
     private ILogger<DeadLock> _logger;

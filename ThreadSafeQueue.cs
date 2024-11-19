@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 
 namespace Conference;
 
+[ExampleAttribute(nameof(ThreadSafeQueue), ConsoleKey.D4)]
 internal sealed class ThreadSafeQueue : IExample
 {
     private ILogger<ThreadSafeQueue> _logger;
@@ -24,6 +25,7 @@ internal sealed class ThreadSafeQueue : IExample
         Task process = Parallel.ForAsync(0, 3, cts, async (index, ct) => await ProcessLine(index, ct));
 
         await Task.WhenAll(readFile, process);
+        _logger.LogInformation("File processed");
     }
 
     private async Task ReadFile(CancellationToken cancellationToken)
