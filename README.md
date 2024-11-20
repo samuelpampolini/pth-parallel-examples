@@ -31,6 +31,7 @@ You have input.txt as a 15 line file example, if you want to see more tou can ex
     The application will end when you press ESC key, the only exception is with the Deadlock example that you need to hit `CTRL+C`
 
     You will be presented with the follow options:
+    D means digit, so D1 is equal to type 1.
     ```bash
     info: Program[0] Press the number of the example you want to run:
     info: Conference.ExampleFactory[0] D1 - DeadLock
