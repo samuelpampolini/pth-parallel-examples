@@ -30,6 +30,7 @@ while (true)
 {
     Console.Clear();
     logger.LogInformation("Press the number of the example you want to run:");
+    logger.LogInformation("Press Escape to the end the program or the example after finishes");
     logger.LogInformation("Press C key to clear the console");
     exampleFactory.PrintCommands();
 
